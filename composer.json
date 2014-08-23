@@ -1,0 +1,27 @@
+{
+    "name": "rudak/rss-bundle",
+    "type": "symfony-bundle",
+    "description": "Symfony RssBundle",
+    "keywords": ["flux","rss"],
+    "license": "GPL-3.0+",
+    "authors": [
+        {
+            "name": "Kadur Arnaud",
+            "email": "contact@kadur-arnaud.fr",
+            "homepage": "http://kadur-arnaud.fr"
+        }
+    ],
+    "require": {
+        "php": ">=5.3.2",
+        "symfony/framework-bundle": ">=2.1",
+        "twig/twig": "*",
+        "doctrine/doctrine-bundle": "*"
+    },
+    "autoload": {
+        "psr-0": {
+            "Rudak\\Bundle\\RssBundle": ""
+        }
+    },
+    "target-dir": "Rudak/Bundle/RssBundle",
+    "minimum-stability": "dev"
+}
