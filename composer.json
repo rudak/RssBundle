@@ -19,9 +19,9 @@
     },
     "autoload": {
         "psr-0": {
-            "Rudak\\Bundle\\RssBundle": ""
+            "Rudak\\RssBundle": ""
         }
     },
-    "target-dir": "Rudak/Bundle/RssBundle",
+    "target-dir": "Rudak/RssBundle",
     "minimum-stability": "dev"
 }
