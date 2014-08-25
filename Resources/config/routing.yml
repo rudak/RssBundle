@@ -1,1 +1,3 @@
-
+rudak_rss_homepage:
+    path:     /hello/{name}
+    defaults: { _controller: RudakRssBundle:Default:index }

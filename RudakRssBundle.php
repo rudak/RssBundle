@@ -1,12 +1,9 @@
 <?php
 
-namespace Rudak\Bundle\RssBundle;
+namespace Rudak\RssBundle;
 
 use Symfony\Component\HttpKernel\Bundle\Bundle;
 
 class RudakRssBundle extends Bundle
 {
-    public function __construct()
-    {
-    }
 }

@@ -1,50 +1,7 @@
 parameters:
-    rssparameters:
-        entity:            
-            repository:   ActuActuBundle:Actuality
-            methodName:   get_last_30_actus
-        items:
-            route:        front_voir_une_actualite
-            params:
-                id:   id
-                slug: 
-                    type:   slug
-                    target: title
-        associations:
-            title       : title
-            description : header
-            pubDate     : postedAt
-            guid        : id
-        channel:
-            title       : Flux rss de votre site web
-            link        : http://votresite.com
-            description : description de votre site
-            pubDate     : 
-                _object: 
-                    type    : datetime
-                    index   : pubDate
-            image       : 
-                _object:
-                    type    : image
-                    url     : http://www.image.fr/image.jpg
-                    index   : image
-            language      : fr
-            copyright     : rudak@free.fr
-            webmaster     : arnaud kadur
-            lastBuildDate :
-                _object:
-                    type    : datetime
-                    index   : lastBuildDate
-            managingEditor  : richard@free.de (jojo)
-            generator       : rudak_generator (patrick)
-            ttl             : '10505'
+#    rudak_rss.example.class: Rudak\RssBundle\Example
 
 services:
-    rss.generator:
-        class: namespace Rudak\Bundle\RssBundle\Classes\RssGenerator
-        arguments:
-            parameters: %rssparameters% 
-            services:
-                router      : @router
-                templating  : @templating
-                doctrine    : @doctrine
+#    rudak_rss.example:
+#        class: %rudak_rss.example.class%
+#        arguments: [@service_id, "plain_value", %parameter%]
