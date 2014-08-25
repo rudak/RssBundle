@@ -1,7 +1,50 @@
 parameters:
-#    rudak_rss.example.class: Rudak\RssBundle\Example
+    rssparameters:
+        entity:            
+            repository:   tonrepo:entity
+            methodName:   derniersItems
+        items:
+            route:        la_route_vers_ta_page
+            params:
+                id:   id
+                slug: 
+                    type:   slug
+                    target: title
+        associations:
+            title       : title
+            description : header
+            pubDate     : postedAt
+            guid        : id
+        channel:
+            title       : title du site
+            link        : http://tonsite.fr
+            description : Site exemple
+            pubDate     : 
+                _object: 
+                    type    : datetime
+                    index   : pubDate
+            image       : 
+                _object:
+                    type    : image
+                    url     : http://www.image.fr/image.jpg
+                    index   : image
+            language      : fr
+            copyright     : billyjoue@free.com
+            webmaster     : moolwahad@zambie.org
+            lastBuildDate :
+                _object:
+                    type    : datetime
+                    index   : lastBuildDate
+            managingEditor  : richard@free.de (jojo)
+            generator       : rudak_generator (patrick)
+            ttl             : '10505'
 
 services:
-#    rudak_rss.example:
-#        class: %rudak_rss.example.class%
-#        arguments: [@service_id, "plain_value", %parameter%]
+    rss.generator:
+        class: Rudak\RssBundle\Classes\RssGenerator
+        arguments:
+            parameters: %rssparameters% 
+            services:
+                router      : @router
+                templating  : @templating
+                doctrine    : @doctrine
