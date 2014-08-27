@@ -34,7 +34,7 @@ class RssGenerator
 
     public function setRssEntities(array $entities)
     {
-
+        $this->entities = $entities;
     }
 
     public function writeTheRssFile()
