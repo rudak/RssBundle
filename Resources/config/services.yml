@@ -19,22 +19,19 @@ parameters:
             title       : title du site
             link        : http://tonsite.fr
             description : Site exemple
-            pubDate     : 
-                _object: 
-                    type    : datetime
-                    index   : pubDate
-            image       : 
-                _object:
-                    type    : image
-                    url     : http://www.image.fr/image.jpg
-                    index   : image
+            pubDate     :
+                type    : datetime
+                index   : pubDate
+            image       :
+                type    : image
+                url     : http://www.image.fr/image.jpg
+                index   : image
             language      : fr
             copyright     : billyjoue@free.com
             webmaster     : moolwahad@zambie.org
             lastBuildDate :
-                _object:
-                    type    : datetime
-                    index   : lastBuildDate
+                type    : datetime
+                index   : lastBuildDate
             managingEditor  : richard@free.de (jojo)
             generator       : rudak_generator (patrick)
             ttl             : '10505'
