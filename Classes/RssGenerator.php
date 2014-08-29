@@ -78,7 +78,8 @@ class RssGenerator
         foreach ($argsName as $key => $arg) {
             if (is_array($arg)) {
                 if ($arg['type'] == 'slug') {
-                    $params[$key] = 'un_faux-slug-456';
+                    $entityValue  = call_user_func(array($entity, $this->getMethodByAttributeName($arg['target'])));
+                    $params[$key] = 'fghjk'; #TODO slugger la valeur de l'entité
                 }
             } else {
                 $params[$key] = call_user_func(array($entity, $this->getMethodByAttributeName($arg)));
@@ -90,15 +91,22 @@ class RssGenerator
     private function getAssociation($entity, $association)
     {
         $attr = $this->parameters['associations'][$association];
+        return $this->getEntityValue($entity, $attr);
+    }
+
+    private function getEntityValue($entity, $attr)
+    { #TODO a étendre aux autres
         return call_user_func(array($entity, $this->getMethodByAttributeName($attr)));
     }
 
-    private function getMethodByAttributeName($attribute)
+    private
+    function getMethodByAttributeName($attribute)
     {
         return 'get' . ucfirst($attribute);
     }
 
-    private function setHeadersInfos()
+    private
+    function setHeadersInfos()
     {
         foreach ($this->parameters['channel'] as $key => $value) {
             if (is_array($value)) {
@@ -109,7 +117,8 @@ class RssGenerator
         }
     }
 
-    private function getObjectValue($object)
+    private
+    function getObjectValue($object)
     {
         switch ($object['type']) {
             case 'datetime':
@@ -128,7 +137,8 @@ class RssGenerator
     }
 
 
-    public function writeTheRssFile()
+    public
+    function writeTheRssFile()
     {
         $writer = new RssWriter;
         if (!$writer->writeTheFile('coucou')) {
