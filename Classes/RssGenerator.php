@@ -42,15 +42,60 @@ class RssGenerator
 
     public function makeTheRssContent()
     {
-        echo '<pre style="font-size:0.6em;">';
-        print_r($this->parameters);
-        echo '</pre>';
-
         $this->setHeadersInfos();
+        $this->setItemsInfos();
 
         echo '<pre style="font-size:0.6em;">';
-        print_r($this->channel_infos);
+        print_r($this->items_infos);
         echo '</pre>';
+    }
+
+    private function setItemsInfos()
+    {
+        foreach ($this->entities as $entity) {
+            $this->items_infos[] = array(
+                'title'       => $this->getAssociation($entity, 'title'),
+                'description' => $this->getAssociation($entity, 'description'),
+                'pubDate'     => $this->getAssociation($entity, 'pubDate'),
+                'guid'        => $this->getAssociation($entity, 'guid'),
+                'link'        => $this->getItemLink($entity),
+            );
+        }
+    }
+
+    private function getItemLink($entity)
+    {
+        $route    = $this->parameters['items']['route'];
+        $argsName = $this->parameters['items']['params'];
+
+        $params = $this->getParamsForLink($entity, $argsName);
+        return $this->routeur->generate($route, $params);
+    }
+
+    private function getParamsForLink($entity, $argsName)
+    {
+        $params = array();
+        foreach ($argsName as $key => $arg) {
+            if (is_array($arg)) {
+                if ($arg['type'] == 'slug') {
+                    $params[$key] = 'un_faux-slug-456';
+                }
+            } else {
+                $params[$key] = call_user_func(array($entity, $this->getMethodByAttributeName($arg)));
+            }
+        }
+        return $params;
+    }
+
+    private function getAssociation($entity, $association)
+    {
+        $attr = $this->parameters['associations'][$association];
+        return call_user_func(array($entity, $this->getMethodByAttributeName($attr)));
+    }
+
+    private function getMethodByAttributeName($attribute)
+    {
+        return 'get' . ucfirst($attribute);
     }
 
     private function setHeadersInfos()
@@ -72,15 +117,16 @@ class RssGenerator
                 return $date->format(\DateTime::RSS);
                 break;
             case 'image':
-                return false;
+                return
+                    array(
+                        'url'   => 'http://image.fr',
+                        'title' => 'une image',
+                        'link'  => 'http://kadur-arnaud.fr'
+                    );
                 break;
         }
     }
 
-    private function getMethodByAttributeName($attribute)
-    {
-        return 'get' . ucfirst($attribute);
-    }
 
     public function writeTheRssFile()
     {

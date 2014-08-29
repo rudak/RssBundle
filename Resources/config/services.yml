@@ -4,7 +4,7 @@ parameters:
             repository:   tonrepo:entity
             methodName:   derniersItems
         items:
-            route:        la_route_vers_ta_page
+            route:        blog_blog_article
             params:
                 id:   id
                 slug: 
@@ -12,8 +12,8 @@ parameters:
                     target: title
         associations:
             title       : title
-            description : header
-            pubDate     : postedAt
+            description : description
+            pubDate     : createdAt
             guid        : id
         channel:
             title       : title du site
