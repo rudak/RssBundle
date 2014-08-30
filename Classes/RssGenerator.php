@@ -9,6 +9,7 @@
 namespace Rudak\RssBundle\Classes;
 
 use Rudak\RssBundle\Classes\RssWriter;
+use Rudak\RssBundle\Classes\Slug;
 
 /**
  *
@@ -40,6 +41,9 @@ class RssGenerator
         $this->entities = $entities;
     }
 
+    /*
+     *Fabrique le contenu du RSS
+     */
     public function makeTheRssContent()
     {
         $this->setHeadersInfos();
@@ -50,6 +54,9 @@ class RssGenerator
         echo '</pre>';
     }
 
+    /*
+     * Boucle sur les entités pour sortir les items du RSS
+     */
     private function setItemsInfos()
     {
         foreach ($this->entities as $entity) {
@@ -63,6 +70,18 @@ class RssGenerator
         }
     }
 
+    /*
+     * Retourne la valeur de l'entité correspondant a l'association passée en parametres
+     */
+    private function getAssociation($entity, $association)
+    {
+        $attr = $this->parameters['associations'][$association];
+        return $this->getEntityValue($entity, $attr);
+    }
+
+    /*
+     * renvoie un lien correspondant a l'entité et a la route passée en parametres
+     */
     private function getItemLink($entity)
     {
         $route    = $this->parameters['items']['route'];
@@ -72,41 +91,47 @@ class RssGenerator
         return $this->routeur->generate($route, $params);
     }
 
+    /*
+     * Va chercher les parametres pour la création des URL
+     */
     private function getParamsForLink($entity, $argsName)
     {
         $params = array();
         foreach ($argsName as $key => $arg) {
             if (is_array($arg)) {
                 if ($arg['type'] == 'slug') {
-                    $entityValue  = call_user_func(array($entity, $this->getMethodByAttributeName($arg['target'])));
-                    $params[$key] = 'fghjk'; #TODO slugger la valeur de l'entité
+                    $entityValue  = $this->getEntityValue($entity, $arg['target']);
+                    $slug         = new Slug($entityValue);
+                    $params[$key] = $slug->getSlug();
                 }
             } else {
-                $params[$key] = call_user_func(array($entity, $this->getMethodByAttributeName($arg)));
+                $params[$key] = $this->getEntityValue($entity, $arg);
             }
         }
         return $params;
     }
 
-    private function getAssociation($entity, $association)
-    {
-        $attr = $this->parameters['associations'][$association];
-        return $this->getEntityValue($entity, $attr);
-    }
-
+    /*
+     * retourne la valeur de l'attribut $attr dans l'entité $entity
+     */
     private function getEntityValue($entity, $attr)
-    { #TODO a étendre aux autres
+    {
+        # TODO faire des verifs de methodes
         return call_user_func(array($entity, $this->getMethodByAttributeName($attr)));
     }
 
-    private
-    function getMethodByAttributeName($attribute)
+    /*
+     * Renvoie le nom de la methode en fonction du nom de l'attribut
+     */
+    private function getMethodByAttributeName($attribute)
     {
         return 'get' . ucfirst($attribute);
     }
 
-    private
-    function setHeadersInfos()
+    /*
+     * Creation de l'entete
+     */
+    private function setHeadersInfos()
     {
         foreach ($this->parameters['channel'] as $key => $value) {
             if (is_array($value)) {
@@ -117,8 +142,10 @@ class RssGenerator
         }
     }
 
-    private
-    function getObjectValue($object)
+    /*
+     * Renvoie la valeur de l'objet selon le type
+     */
+    private function getObjectValue($object)
     {
         switch ($object['type']) {
             case 'datetime':
@@ -136,9 +163,10 @@ class RssGenerator
         }
     }
 
-
-    public
-    function writeTheRssFile()
+    /*
+     * Ecriture du fichier
+     */
+    public function writeTheRssFile()
     {
         $writer = new RssWriter;
         if (!$writer->writeTheFile('coucou')) {
