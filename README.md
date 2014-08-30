@@ -6,7 +6,9 @@ Bundle qui crée votre flux RSS à la volée, (après chaque création de conten
 ##Installation
 * composer.json => require ```"rudak/rss-bundle": "dev-master"```
 * app_kernel => ```new Rudak\RssBundle\RudakRssBundle()```
+
 ##Utilisation
+
 1. Il faut chopper le service nommé ```rss.generator```
 2. Il faut bien configurer le fichier service.xml, surtout les associations, et les parametres de routing items.route et items.params
 3. Il faut que le générateur sache sur quelles entités il doit boucler pour creer le flux, donc soit on lui passe le tableau d'entités (les 15 dernieres par exemple, ou toute la liste mais ca peut etre lourd...) grace a ```setRssEntities()``` , soit on renseigne les parametres ```entity.repository``` et ```entity.methodName``` dans service.xml et on laisse le générateur attraper lui meme les entités.
