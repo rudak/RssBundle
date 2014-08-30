@@ -47,11 +47,8 @@ class RssGenerator
     public function makeTheRssContent()
     {
         $this->setHeadersInfos();
-        $this->setItemsInfos();
 
-        echo '<pre style="font-size:0.6em;">';
-        print_r($this->items_infos);
-        echo '</pre>';
+        $this->setItemsInfos();
     }
 
     /*
@@ -63,7 +60,7 @@ class RssGenerator
             $this->items_infos[] = array(
                 'title'       => $this->getAssociation($entity, 'title'),
                 'description' => $this->getAssociation($entity, 'description'),
-                'pubDate'     => $this->getAssociation($entity, 'pubDate'),
+                'pubdate'     => $this->getAssociation($entity, 'pubDate'),
                 'guid'        => $this->getAssociation($entity, 'guid'),
                 'link'        => $this->getItemLink($entity),
             );
@@ -76,7 +73,47 @@ class RssGenerator
     private function getAssociation($entity, $association)
     {
         $attr = $this->parameters['associations'][$association];
-        return $this->getEntityValue($entity, $attr);
+
+        if (is_array($attr)) {
+            return $this->getArrayAssociation($entity, $attr);
+        } else {
+            $value = $this->getEntityValue($entity, $attr);
+        }
+        return $value;
+    }
+
+    /*
+     * Renvoie le type spécifique demandé si il s'agit d'un parametre spécial
+     */
+    private function getArrayAssociation($entity, $attr)
+    {
+        #TODO verifier si les parametres requis sont la pour chaques types
+        switch (strtolower($attr['type'])) {
+            case 'datetime':
+                if ($entity) {
+                    $value = $this->getEntityValue($entity, $attr['index']);
+                } else {
+                    $value = new \DateTime('NOW');
+                }
+                return $value->format(\DateTime::RSS);
+                break;
+            case 'slug':
+                if ($entity) {
+                    $value = $this->getEntityValue($entity, $attr['index']);
+                } else {
+                    $value = $attr['index'];
+                }
+                $Slug = new Slug($value);
+                return $Slug->getSlug();
+                break;
+            case 'image':
+                return array(
+                    'url'   => $attr['url'],
+                    'title' => $attr['title'],
+                    'link'  => $attr['link'] ? $attr['link'] : ''
+                );
+                break;
+        }
     }
 
     /*
@@ -88,7 +125,7 @@ class RssGenerator
         $argsName = $this->parameters['items']['params'];
 
         $params = $this->getParamsForLink($entity, $argsName);
-        return $this->routeur->generate($route, $params);
+        return $this->routeur->generate($route, $params, true);
     }
 
     /*
@@ -99,11 +136,7 @@ class RssGenerator
         $params = array();
         foreach ($argsName as $key => $arg) {
             if (is_array($arg)) {
-                if ($arg['type'] == 'slug') {
-                    $entityValue  = $this->getEntityValue($entity, $arg['target']);
-                    $slug         = new Slug($entityValue);
-                    $params[$key] = $slug->getSlug();
-                }
+                $params[$key] = $this->getArrayAssociation($entity, $arg);
             } else {
                 $params[$key] = $this->getEntityValue($entity, $arg);
             }
@@ -116,7 +149,7 @@ class RssGenerator
      */
     private function getEntityValue($entity, $attr)
     {
-        # TODO faire des verifs de methodes
+        #TODO faire des verifs de methodes
         return call_user_func(array($entity, $this->getMethodByAttributeName($attr)));
     }
 
@@ -134,42 +167,29 @@ class RssGenerator
     private function setHeadersInfos()
     {
         foreach ($this->parameters['channel'] as $key => $value) {
+
             if (is_array($value)) {
-                $this->channel_infos[$key] = $this->getObjectValue($value);
+                $this->channel_infos[$key] = $this->getArrayAssociation(null, $value);
             } else {
                 $this->channel_infos[$key] = $value;
             }
         }
     }
 
-    /*
-     * Renvoie la valeur de l'objet selon le type
-     */
-    private function getObjectValue($object)
-    {
-        switch ($object['type']) {
-            case 'datetime':
-                $date = new \DateTime('NOW');
-                return $date->format(\DateTime::RSS);
-                break;
-            case 'image':
-                return
-                    array(
-                        'url'   => 'http://image.fr',
-                        'title' => 'une image',
-                        'link'  => 'http://kadur-arnaud.fr'
-                    );
-                break;
-        }
-    }
 
     /*
      * Ecriture du fichier
      */
     public function writeTheRssFile()
     {
-        $writer = new RssWriter;
-        if (!$writer->writeTheFile('coucou')) {
+        $writer = new RssWriter();
+
+        $content = $this->templating->render('RudakRssBundle:Default:rss.xml.twig', array(
+            'channel' => $this->channel_infos,
+            'items'   => $this->items_infos,
+        ));
+
+        if (!$writer->writeTheFile($content)) {
             throw new \Exception('Le fichier ./web/RSS.xml doit etre créé, avec les permissions qui vont bien.');
         }
     }

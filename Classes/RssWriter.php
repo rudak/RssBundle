@@ -15,7 +15,7 @@ class RssWriter
 
     public function __construct($fileName = null)
     {
-        $this->fileName = $fileName ? $fileName : 'RSS.xml';
+        $this->fileName = $fileName ? $fileName : 'rss.xml';
     }
 
     public function writeTheFile($data = '')

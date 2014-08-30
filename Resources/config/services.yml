@@ -9,11 +9,13 @@ parameters:
                 id:   id
                 slug: 
                     type:   slug
-                    target: title
+                    index: title
         associations:
             title       : title
             description : description
-            pubDate     : createdAt
+            pubDate     :
+                type    : datetime
+                index   : createdAt
             guid        : id
         channel:
             title       : title du site
@@ -24,11 +26,13 @@ parameters:
                 index   : pubDate
             image       :
                 type    : image
-                url     : http://www.image.fr/image.jpg
+                url     : http://www.image.fr/xxxx.jpg
                 index   : image
+                title   : Accueil site john Doe
+                link    : http://johnDoe.com
             language      : fr
-            copyright     : billyjoue@free.com
-            webmaster     : moolwahad@zambie.org
+            copyright     : johnny@doo.com
+            webmaster     : john@doe.org
             lastBuildDate :
                 type    : datetime
                 index   : lastBuildDate
