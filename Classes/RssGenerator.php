@@ -55,15 +55,15 @@ class RssGenerator
     }
 
     /*
-     *Fabrique le contenu du RSS
+     * Fabrique le contenu du RSS
      */
     public function makeTheRssContent()
     {
         if (empty($this->entities)) {
             $this->entities = $this->grabEntities();
         }
-        $this->setHeadersInfos();
 
+        $this->setHeadersInfos();
         $this->setItemsInfos();
     }
 
@@ -93,9 +93,8 @@ class RssGenerator
         if (is_array($attr)) {
             return $this->getArrayAssociation($entity, $attr);
         } else {
-            $value = $this->getEntityValue($entity, $attr);
+            return $this->getEntityValue($entity, $attr);
         }
-        return $value;
     }
 
     /*
@@ -139,8 +138,7 @@ class RssGenerator
     {
         $route    = $this->parameters['items']['route'];
         $argsName = $this->parameters['items']['params'];
-
-        $params = $this->getParamsForLink($entity, $argsName);
+        $params   = $this->getParamsForLink($entity, $argsName);
         return $this->routeur->generate($route, $params, true);
     }
 
@@ -183,12 +181,7 @@ class RssGenerator
     private function setHeadersInfos()
     {
         foreach ($this->parameters['channel'] as $key => $value) {
-
-            if (is_array($value)) {
-                $this->channel_infos[$key] = $this->getArrayAssociation(null, $value);
-            } else {
-                $this->channel_infos[$key] = $value;
-            }
+            $this->channel_infos[$key] = is_array($value) ? $this->getArrayAssociation(null, $value) : $value;
         }
     }
 
@@ -198,8 +191,7 @@ class RssGenerator
      */
     public function writeTheRssFile()
     {
-        $writer = new RssWriter();
-
+        $writer  = new RssWriter();
         $content = $this->templating->render('RudakRssBundle:Default:rss.xml.twig', array(
             'channel' => $this->channel_infos,
             'items'   => $this->items_infos,
