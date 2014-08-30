@@ -4,8 +4,8 @@ RssBundle
 Bundle qui crée votre flux RSS à la volée, (après chaque création de contenu).
 
 ##Installation
-composer.json => require ```"rudak/rss-bundle": "dev-master"```
-app_kernel => ```new Rudak\RssBundle\RudakRssBundle()```
+* composer.json => require ```"rudak/rss-bundle": "dev-master"```
+* app_kernel => ```new Rudak\RssBundle\RudakRssBundle()```
 ##Utilisation
 1. Il faut chopper le service nommé ```rss.generator```
 2. Il faut bien configurer le fichier service.xml, surtout les associations, et les parametres de routing items.route et items.params
