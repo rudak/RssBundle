@@ -41,11 +41,27 @@ class RssGenerator
         $this->entities = $entities;
     }
 
+    private function grabEntities()
+    {
+        $em             = $this->doctrine->getManager();
+        $repositoryName = $this->parameters['entity']['repository'];
+        $repo           = $em->getRepository($repositoryName);
+        $method         = $this->parameters['entity']['methodName'];
+        if (method_exists($repo, $method)) {
+            return call_user_func(array($repo, $method));
+        } else {
+            throw new \Exception("RssBundle/resources/config/service.xml : \n La méthode " . $method . "() n'existe pas.");
+        }
+    }
+
     /*
      *Fabrique le contenu du RSS
      */
     public function makeTheRssContent()
     {
+        if (empty($this->entities)) {
+            $this->entities = $this->grabEntities();
+        }
         $this->setHeadersInfos();
 
         $this->setItemsInfos();

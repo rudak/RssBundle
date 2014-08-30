@@ -1,8 +1,8 @@
 parameters:
     rssparameters:
         entity:            
-            repository:   tonrepo:entity
-            methodName:   derniersItems
+            repository:   ExempleBlogBundle:Article
+            methodName:   getLast
         items:
             route:        blog_blog_article
             params:
@@ -26,7 +26,7 @@ parameters:
                 index   : pubDate
             image       :
                 type    : image
-                url     : http://www.image.fr/xxxx.jpg
+                url     : http://www.image.fr/myImage.jpg
                 index   : image
                 title   : Accueil site john Doe
                 link    : http://johnDoe.com
