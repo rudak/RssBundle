@@ -26,4 +26,14 @@ class RssWriter
             return file_put_contents($this->fileName, $data);
         }
     }
+
+    /**
+     * @return null|string
+     */
+    public function getFileName()
+    {
+        return $this->fileName;
+    }
+    
+
 } 
