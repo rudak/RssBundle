@@ -198,7 +198,7 @@ class RssGenerator
         ));
 
         if (!$writer->writeTheFile($content)) {
-            throw new \Exception('Le fichier ./web/RSS.xml doit etre créé, avec les permissions qui vont bien.');
+            throw new \Exception('Le fichier ./web/' . $writer->getFileName() . ' doit etre créé, avec les permissions qui vont bien.');
         }
     }
 

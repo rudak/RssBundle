@@ -34,6 +34,6 @@ class RssWriter
     {
         return $this->fileName;
     }
-    
+
 
 } 
