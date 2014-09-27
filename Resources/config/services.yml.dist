@@ -1,8 +1,8 @@
 parameters:
     rssparameters:
         entity:            
-            repository:   BlogBlogBundle:Article
-            methodName:   getAllArticles
+            repository:   ExempleBlogBundle:Article
+            methodName:   getLast
         items:
             route:        blog_blog_article
             params:
@@ -18,26 +18,26 @@ parameters:
                 index   : createdAt
             guid        : id
         channel:
-            title       : Blog de Kadur Arnaud
-            link        : http://kadur-arnaud.fr
-            description : Blog de dev web simple
+            title       : title du site
+            link        : http://tonsite.fr
+            description : Site exemple
             pubDate     :
                 type    : datetime
                 index   : pubDate
             image       :
                 type    : image
-                url     : http://kadur-arnaud.fr/perso/imgs/tronche.gif
+                url     : http://www.image.fr/myImage.jpg
                 index   : image
-                title   : Accueil site de Kadur Arnaud
-                link    : http://kadur-arnaud.fr
+                title   : Accueil site john Doe
+                link    : http://johnDoe.com
             language      : fr
-            copyright     : arnaud.kadur@gmail.com
-            webmaster     : arnaud kadur
+            copyright     : johnny@doo.com
+            webmaster     : john@doe.org
             lastBuildDate :
                 type    : datetime
                 index   : lastBuildDate
-            managingEditor  : arnaud.kadur@gmail.com (arnaud kadur)
-            generator       : rudak_generator (rudak gegen)
+            managingEditor  : richard@free.de (jojo)
+            generator       : rudak_generator (patrick)
             ttl             : '10505'
 
 services:
