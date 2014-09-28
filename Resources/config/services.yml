@@ -1,0 +1,11 @@
+parameters:
+
+services:
+    rss.generator:
+        class: Rudak\RssBundle\Classes\RssGenerator
+        arguments:
+            parameters: %rssconfig%
+            services:
+                router      : @router
+                templating  : @templating
+                doctrine    : @doctrine
